@@ -1,0 +1,1984 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 МемБанк ПРО - Мультиплеер Кликер</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #6a11cb;
+            --secondary: #2575fc;
+            --accent: #ff00ff;
+            --success: #00ff88;
+            --warning: #ffaa00;
+            --danger: #ff3860;
+            --dark: #0a0a1a;
+            --light: #ffffff;
+            --coin-gold: #ffd700;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dark) 0%, #1a1a3e 100%);
+            color: var(--light);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Шапка */
+        .header {
+            background: rgba(10, 10, 26, 0.9);
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 3px solid var(--secondary);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .balance {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--success);
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+
+        .username {
+            color: var(--secondary);
+            font-size: 1.2rem;
+        }
+
+        /* Навигация */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 15px 30px;
+            background: transparent;
+            border: none;
+            color: var(--light);
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .tab-btn.active {
+                background: var(--primary);
+                box-shadow: 0 5px 20px rgba(106, 17, 203, 0.5);
+                transform: translateY(-3px);
+            }
+
+            .tab-btn:hover:not(.active) {
+                background: rgba(255, 255, 255, 0.1);
+                transform: translateY(-2px);
+            }
+
+        /* Контент вкладок */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+            .tab-content.active {
+                display: block;
+            }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Секции */
+        .section {
+            background: rgba(10, 10, 26, 0.8);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 2px solid;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 25px;
+            color: var(--secondary);
+            text-align: center;
+        }
+
+        /* КЛИКЕР */
+        .clicker-section {
+            border-color: var(--primary);
+        }
+
+        .clicker-container {
+            text-align: center;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            min-width: 200px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--success);
+            margin-top: 10px;
+        }
+
+        .meme-coin {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+        }
+
+        .coin {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 30%, var(--coin-gold), #ff6b00);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            font-weight: bold;
+            color: #8b0000;
+            border: 15px solid #ff8c00;
+            box-shadow: 0 0 50px var(--coin-gold), inset 0 0 50px rgba(255, 215, 0, 0.5);
+            transition: transform 0.1s;
+            animation: rotateCoin 20s linear infinite;
+        }
+
+        @keyframes rotateCoin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .coin:active {
+            transform: scale(0.95);
+        }
+
+        .click-effect {
+            position: absolute;
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--success);
+            animation: floatUp 1s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(1.5);
+            }
+        }
+
+        /* УЛУЧШЕНИЯ */
+        .upgrades-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .upgrade-card {
+            background: linear-gradient(135deg, rgba(106, 17, 203, 0.2), rgba(37, 117, 252, 0.2));
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid var(--primary);
+            transition: all 0.3s;
+        }
+
+            .upgrade-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px rgba(106, 17, 203, 0.4);
+            }
+
+        .upgrade-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .upgrade-icon {
+            font-size: 2.5rem;
+        }
+
+        .upgrade-price {
+            color: var(--warning);
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+
+        /* КРИПТОВАЛЮТЫ */
+        .crypto-section {
+            border-color: var(--success);
+        }
+
+        .crypto-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .crypto-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid;
+            transition: all 0.3s;
+        }
+
+            .crypto-card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            }
+
+        .crypto-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .crypto-icon {
+            font-size: 2.5rem;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .crypto-price {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 15px 0;
+            color: var(--coin-gold);
+        }
+
+        .crypto-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* ИГРЫ */
+        .games-section {
+            border-color: var(--accent);
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .game-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            border: 2px solid var(--accent);
+            transition: all 0.3s;
+        }
+
+            .game-card:hover {
+                transform: scale(1.05);
+                box-shadow: 0 15px 30px rgba(255, 0, 255, 0.3);
+            }
+
+        .game-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .game-display {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slots-display {
+            display: flex;
+            gap: 15px;
+            font-size: 3rem;
+        }
+
+        .slot-reel {
+            width: 70px;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            border: 2px solid var(--warning);
+        }
+
+        .dice-display {
+            font-size: 4rem;
+        }
+
+        .coin-display {
+            font-size: 4rem;
+            transform-style: preserve-3d;
+        }
+
+        .crash-display {
+            width: 100%;
+            height: 60px;
+            background: linear-gradient(90deg, #00ff00, #ff0000);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .crash-line {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: white;
+        }
+
+        /* ПЕРЕВОДЫ */
+        .transfer-section {
+            border-color: var(--warning);
+        }
+
+        .transfer-form {
+            max-width: 500px;
+            margin: 30px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        input, select, textarea {
+            padding: 18px;
+            border-radius: 12px;
+            border: 2px solid var(--secondary);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            font-size: 1.1rem;
+        }
+
+        .btn {
+            padding: 18px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+            .btn:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 10px 25px rgba(106, 17, 203, 0.4);
+            }
+
+        /* ЛИДЕРБОРД */
+        .leaderboard-section {
+            border-color: var(--danger);
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+            .leaderboard-table th {
+                background: rgba(106, 17, 203, 0.3);
+                padding: 20px;
+                text-align: left;
+                color: var(--secondary);
+            }
+
+            .leaderboard-table td {
+                padding: 20px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .leaderboard-table tr:hover {
+                background: rgba(255, 255, 255, 0.05);
+            }
+
+        .rank-1 {
+            color: #ffd700;
+        }
+
+        .rank-2 {
+            color: #c0c0c0;
+        }
+
+        .rank-3 {
+            color: #cd7f32;
+        }
+
+        /* МОДАЛКИ */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, var(--dark), #2a2a4a);
+            padding: 40px;
+            border-radius: 25px;
+            width: 90%;
+            max-width: 500px;
+            border: 3px solid var(--accent);
+            animation: modalAppear 0.3s ease;
+        }
+
+        @keyframes modalAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* УВЕДОМЛЕНИЯ */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 20px 30px;
+            background: rgba(10, 10, 26, 0.95);
+            color: white;
+            font-weight: bold;
+            border-radius: 15px;
+            border-left: 5px solid;
+            display: none;
+            z-index: 1001;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .notification.success {
+            border-color: var(--success);
+        }
+
+        .notification.error {
+            border-color: var(--danger);
+        }
+
+        .notification.warning {
+            border-color: var(--warning);
+        }
+
+        /* ПАСХАЛКИ */
+        .easter-egg {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 2rem;
+            opacity: 0.2;
+            cursor: pointer;
+            transition: opacity 0.3s;
+            z-index: 999;
+        }
+
+            .easter-egg:hover {
+                opacity: 1;
+            }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .tabs {
+                justify-content: center;
+            }
+
+            .tab-btn {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+
+            .meme-coin {
+                width: 250px;
+                height: 250px;
+            }
+
+            .coin {
+                font-size: 4rem;
+            }
+
+            .stats {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .stat {
+                min-width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Пасхалка -->
+    <div class="easter-egg" onclick="clickEasterEgg()">🥚</div>
+
+    <div class="container">
+        <!-- Шапка -->
+        <div class="header">
+            <div class="logo">
+                <span>🎮</span>
+                <span>МемБанк Мультиплеер</span>
+            </div>
+            <div class="user-info">
+                <div class="username" id="username">Гость</div>
+                <div class="balance" id="balance">0 ₣</div>
+                <button class="btn" onclick="logout()" style="margin-top: 10px; padding: 10px 20px; font-size: 1rem;">Выйти</button>
+            </div>
+        </div>
+
+        <!-- Навигация -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('clicker')">
+                <span>🏦</span> Кликер
+            </button>
+            <button class="tab-btn" onclick="showTab('crypto')">
+                <span>₿</span> Криптовалюты
+            </button>
+            <button class="tab-btn" onclick="showTab('games')">
+                <span>🎯</span> Игры
+            </button>
+            <button class="tab-btn" onclick="showTab('transfer')">
+                <span>💸</span> Переводы
+            </button>
+            <button class="tab-btn" onclick="showTab('leaderboard')">
+                <span>🏆</span> Лидерборд
+            </button>
+        </div>
+
+        <!-- КЛИКЕР -->
+        <div id="clicker" class="tab-content active">
+            <div class="section clicker-section">
+                <h2 class="section-title">🚀 Зарабатывай Мемкоины!</h2>
+
+                <div class="clicker-container">
+                    <div class="stats">
+                        <div class="stat">
+                            <div>За клик</div>
+                            <div class="stat-value" id="click-value">1 ₣</div>
+                        </div>
+                        <div class="stat">
+                            <div>Пассивный доход</div>
+                            <div class="stat-value" id="passive-income">0 ₣/сек</div>
+                        </div>
+                        <div class="stat">
+                            <div>Всего кликов</div>
+                            <div class="stat-value" id="total-clicks">0</div>
+                        </div>
+                    </div>
+
+                    <div class="meme-coin" id="meme-coin" onclick="clickCoin(event)">
+                        <div class="coin">₣</div>
+                    </div>
+
+                    <h3 style="margin: 40px 0 20px 0; color: var(--secondary);">⚡ Улучшения</h3>
+                    <div class="upgrades-grid" id="upgrades-grid">
+                        <!-- Улучшения загружаются тут -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- КРИПТОВАЛЮТЫ -->
+        <div id="crypto" class="tab-content">
+            <div class="section crypto-section">
+                <h2 class="section-title">📈 Криптовалютный рынок</h2>
+                <p style="text-align: center; color: #aaa; margin-bottom: 30px;">
+                    Покупайте и продавайте криптовалюты! Цены меняются каждые 30 секунд.
+                </p>
+
+                <div class="crypto-grid" id="crypto-market">
+                    <!-- Криптовалюты загружаются тут -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ИГРЫ С АНИМАЦИЯМИ -->
+        <div id="games" class="tab-content">
+            <div class="section games-section">
+                <h2 class="section-title">🎮 Мини-Игры</h2>
+                <p style="text-align: center; color: #aaa; margin-bottom: 30px;">
+                    Отдохните от кликов и сыграйте в эти игры!
+                </p>
+
+                <div class="games-grid">
+                    <!-- СЛОТЫ -->
+                    <div class="game-card">
+                        <div class="game-icon">🎰</div>
+                        <h3 style="color: var(--warning); margin-bottom: 10px;">Слоты</h3>
+                        <p style="color: #aaa; margin-bottom: 15px;">Крутите барабаны и выигрывайте до 10x ставки!</p>
+
+                        <div class="game-display">
+                            <div class="slots-display" id="slots-display">
+                                <div class="slot-reel">🎰</div>
+                                <div class="slot-reel">🎰</div>
+                                <div class="slot-reel">🎰</div>
+                            </div>
+                        </div>
+                        <div id="slots-result" style="color: var(--warning); font-weight: bold; min-height: 30px; margin: 10px 0;"></div>
+
+                        <button class="btn" onclick="playSlots()" style="width: 100%; margin-top: 10px;">
+                            🎰 Крутить слоты (100 ₣)
+                        </button>
+                    </div>
+
+                    <!-- КОСТИ -->
+                    <div class="game-card">
+                        <div class="game-icon">🎲</div>
+                        <h3 style="color: var(--warning); margin-bottom: 10px;">Кости</h3>
+                        <p style="color: #aaa; margin-bottom: 15px;">Угадайте число от 1 до 6. Шанс 1 к 6!</p>
+
+                        <div class="game-display">
+                            <div class="dice-display" id="dice-display">🎲</div>
+                        </div>
+                        <div id="dice-result" style="color: var(--warning); font-weight: bold; min-height: 30px; margin: 10px 0;"></div>
+
+                        <button class="btn" onclick="playDice()" style="width: 100%; margin-top: 10px;">
+                            🎲 Бросить кости (50 ₣)
+                        </button>
+                    </div>
+
+                    <!-- ОРЕЛ-РЕШКА -->
+                    <div class="game-card">
+                        <div class="game-icon">🪙</div>
+                        <h3 style="color: var(--warning); margin-bottom: 10px;">Орел-Решка</h3>
+                        <p style="color: #aaa; margin-bottom: 15px;">Угадайте сторону монеты. Шанс 50/50!</p>
+
+                        <div class="game-display">
+                            <div class="coin-display" id="coin-display">🪙</div>
+                        </div>
+                        <div id="coin-result" style="color: var(--warning); font-weight: bold; min-height: 30px; margin: 10px 0;"></div>
+
+                        <button class="btn" onclick="playCoinFlip()" style="width: 100%; margin-top: 10px;">
+                            🪙 Подбросить монету (20 ₣)
+                        </button>
+                    </div>
+
+                    <!-- CRASH GAME -->
+                    <div class="game-card">
+                        <div class="game-icon">📈</div>
+                        <h3 style="color: var(--warning); margin-bottom: 10px;">Crash Game</h3>
+                        <p style="color: #aaa; margin-bottom: 15px;">Успейте забрать выигрыш до краха графика!</p>
+
+                        <div class="game-display">
+                            <div class="crash-display" id="crash-display">
+                                <div class="crash-line"></div>
+                            </div>
+                        </div>
+                        <div id="crash-result" style="color: var(--warning); font-weight: bold; min-height: 30px; margin: 10px 0;"></div>
+
+                        <button class="btn" onclick="playCrash()" style="width: 100%; margin-top: 10px;">
+                            📈 Играть в Crash (200 ₣)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ПЕРЕВОДЫ -->
+        <div id="transfer" class="tab-content">
+            <div class="section transfer-section">
+                <h2 class="section-title">💸 Переводы между игроками</h2>
+
+                <div class="transfer-form">
+                    <select id="recipient-select">
+                        <option value="">Выберите получателя</option>
+                    </select>
+                    <input type="number" id="transfer-amount" placeholder="Сумма перевода (₣)" min="1">
+                    <textarea id="transfer-message" placeholder="Сообщение (введите название игры для пасхалок)" rows="3"></textarea>
+                    <button class="btn" onclick="makeTransfer()">
+                        📤 Отправить перевод
+                    </button>
+                </div>
+
+                <div style="margin-top: 40px;">
+                    <h3 style="color: var(--secondary); margin-bottom: 20px;">📜 История переводов</h3>
+                    <div id="transfer-history" style="max-height: 400px; overflow-y: auto; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 10px;">
+                        <!-- История будет тут -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЛИДЕРБОРД -->
+        <div id="leaderboard" class="tab-content">
+            <div class="section leaderboard-section">
+                <h2 class="section-title">🏆 ТОП Игроков</h2>
+
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>🏅 Место</th>
+                            <th>👤 Игрок</th>
+                            <th>💰 Баланс</th>
+                            <th>₿ Крипта</th>
+                            <th>📊 Уровень</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body">
+                        <!-- Лидерборд будет тут -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- МОДАЛКА ВХОДА/РЕГИСТРАЦИИ -->
+    <div class="modal" id="auth-modal" style="display: flex;">
+        <div class="modal-content">
+            <h2 style="text-align: center; margin-bottom: 30px; color: var(--secondary);">
+                🎮 Добро пожаловать в МемБанк!
+            </h2>
+
+            <div id="login-form">
+                <input type="text" id="login-username" placeholder="👤 Имя пользователя" style="width: 100%; margin-bottom: 20px;">
+                <input type="password" id="login-password" placeholder="🔑 Пароль" style="width: 100%; margin-bottom: 20px;">
+                <div style="display: flex; gap: 15px;">
+                    <button class="btn" onclick="performLogin()" style="flex: 1;">
+                        Войти
+                    </button>
+                    <button class="btn" onclick="showRegisterForm()" style="flex: 1; background: var(--accent);">
+                        Регистрация
+                    </button>
+                </div>
+            </div>
+
+            <div id="register-form" style="display: none;">
+                <input type="text" id="register-username" placeholder="👤 Придумайте логин" style="width: 100%; margin-bottom: 20px;">
+                <input type="password" id="register-password" placeholder="🔑 Придумайте пароль" style="width: 100%; margin-bottom: 20px;">
+                <input type="password" id="register-confirm" placeholder="🔑 Подтвердите пароль" style="width: 100%; margin-bottom: 20px;">
+                <div style="display: flex; gap: 15px;">
+                    <button class="btn" onclick="register()" style="flex: 1; background: var(--warning);">
+                        Зарегистрироваться
+                    </button>
+                    <button class="btn" onclick="showLoginForm()" style="flex: 1; background: #666;">
+                        Назад
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- УВЕДОМЛЕНИЯ -->
+    <div class="notification" id="notification"></div>
+
+    <script>
+        // ========================
+        // ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
+        // ========================
+
+        let currentUser = null;
+        let userData = null;
+        let passiveInterval = null;
+        let cryptoPrices = {};
+        let easterEggsFound = [];
+
+        // УЛУЧШЕНИЯ (6 штук!)
+        const upgrades = [
+            { id: 1, name: "Мембот", icon: "🤖", price: 100, clickBonus: 1, passive: 0, desc: "+1 ₣ за клик" },
+            { id: 2, name: "Мем-ферма", icon: "🚜", price: 500, clickBonus: 5, passive: 0.1, desc: "+5 ₣ за клик, +0.1 ₣/сек" },
+            { id: 3, name: "Крипто-шахта", icon: "⛏️", price: 2000, clickBonus: 20, passive: 1, desc: "+20 ₣ за клик, +1 ₣/сек" },
+            { id: 4, name: "AI Трейдер", icon: "🧠", price: 5000, clickBonus: 50, passive: 5, desc: "+50 ₣ за клик, +5 ₣/сек" },
+            { id: 5, name: "Мем-фабрика", icon: "🏭", price: 15000, clickBonus: 100, passive: 10, desc: "+100 ₣ за клик, +10 ₣/сек" },
+            { id: 6, name: "Квантовый компьютер", icon: "⚛️", price: 50000, clickBonus: 500, passive: 50, desc: "+500 ₣ за клик, +50 ₣/сек" }
+        ];
+
+        // КРИПТОВАЛЮТЫ (6 штук!)
+        const cryptocurrencies = [
+            { id: "MEME", name: "Мемкоин", icon: "₣", color: "#ffd700", basePrice: 1, volatility: 0.05 },
+            { id: "DOGE", name: "Dogecoin", icon: "🐕", color: "#c2a633", basePrice: 0.15, volatility: 0.1 },
+            { id: "SHIB", name: "Shiba Inu", icon: "🦊", color: "#ff6b00", basePrice: 0.000025, volatility: 0.15 },
+            { id: "PEPE", name: "Pepe Coin", icon: "🐸", color: "#00ff88", basePrice: 0.000001, volatility: 0.2 },
+            { id: "BTC", name: "Bitcoin", icon: "₿", color: "#f7931a", basePrice: 45000, volatility: 0.03 },
+            { id: "ETH", name: "Ethereum", icon: "Ξ", color: "#627eea", basePrice: 2500, volatility: 0.04 }
+        ];
+
+        // ПАСХАЛКИ
+        const easterEggs = [
+            { trigger: "ultrakill", name: "UltraKill", message: "🔫 MACHINE! Твои мемкоины... ОНИ ГОРЯТ! +2000 ₣", reward: 2000 },
+            { trigger: "isaac", name: "The Binding of Isaac", message: "😭 Пасхалка: Мама смотрит... +1200 ₣", reward: 1200 },
+            { trigger: "undertale", name: "Undertale", message: "🌟 В этом мире только ТЫ можешь быть ДРУГОМ! +1000 ₣", reward: 1000 },
+            { trigger: "doom", name: "DOOM", message: "😈 RIP AND TEAR! +1500 ₣", reward: 1500 },
+            { trigger: "minecraft", name: "Minecraft", message: "⛏️ Creeper? Аww man! +800 ₣", reward: 800 }
+        ];
+
+        // ========================
+        // ИНИЦИАЛИЗАЦИЯ
+        // ========================
+
+        document.addEventListener('DOMContentLoaded', function () {
+            initGame();
+        });
+
+        function initGame() {
+            // Загружаем или создаем базу пользователей
+            if (!localStorage.getItem('memeBankUsers')) {
+                // Создаем тестовых пользователей для мультиплеера
+                const defaultUsers = {
+                    "Мем_Король": {
+                        password: "123",
+                        balance: 15000,
+                        crypto: { MEME: 2000, DOGE: 10000, BTC: 0.1 },
+                        clickValue: 5,
+                        upgrades: [1, 2, 3],
+                        totalClicks: 1245,
+                        level: 12
+                    },
+                    "КриптоКот": {
+                        password: "123",
+                        balance: 8000,
+                        crypto: { MEME: 1000, SHIB: 5000000, ETH: 0.5 },
+                        clickValue: 3,
+                        upgrades: [1, 2],
+                        totalClicks: 876,
+                        level: 8
+                    },
+                    "ШрекоИнвестор": {
+                        password: "123",
+                        balance: 12000,
+                        crypto: { MEME: 1500, PEPE: 10000000, DOGE: 8000 },
+                        clickValue: 4,
+                        upgrades: [1, 2, 3, 4],
+                        totalClicks: 1567,
+                        level: 15
+                    },
+                    "Гость": { password: "", balance: 0, crypto: {}, clickValue: 1, upgrades: [], totalClicks: 0, level: 1 }
+                };
+                localStorage.setItem('memeBankUsers', JSON.stringify(defaultUsers));
+            }
+
+            // Проверяем авторизацию
+            currentUser = localStorage.getItem('currentUser');
+            if (currentUser && currentUser !== 'Гость') {
+                loadUserData();
+                updateUI();
+                startPassiveIncome();
+                initCryptoMarket();
+                updateLeaderboard();
+                document.getElementById('auth-modal').style.display = 'none';
+            } else {
+                document.getElementById('auth-modal').style.display = 'flex';
+            }
+
+            // Инициализация пасхалок
+            initEasterEggs();
+        }
+
+        // ========================
+        // АВТОРИЗАЦИЯ И РЕГИСТРАЦИЯ
+        // ========================
+
+        function performLogin() {
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            const users = JSON.parse(localStorage.getItem('memeBankUsers'));
+
+            if (!users[username]) {
+                showNotification('❌ Пользователь не найден!', 'error');
+                return;
+            }
+
+            if (users[username].password !== password) {
+                showNotification('❌ Неверный пароль!', 'error');
+                return;
+            }
+
+            currentUser = username;
+            localStorage.setItem('currentUser', username);
+            loadUserData();
+            updateUI();
+            startPassiveIncome();
+            updateLeaderboard();
+            updateRecipients();
+            updateTransferHistory();
+
+            document.getElementById('auth-modal').style.display = 'none';
+            showNotification(`✅ Добро пожаловать, ${username}!`);
+
+            document.getElementById('login-username').value = '';
+            document.getElementById('login-password').value = '';
+        }
+
+        function register() {
+            const username = document.getElementById('register-username').value.trim();
+            const password = document.getElementById('register-password').value;
+            const confirm = document.getElementById('register-confirm').value;
+
+            if (username.length < 3) {
+                showNotification('❌ Логин должен быть не менее 3 символов', 'error');
+                return;
+            }
+
+            if (password.length < 3) {
+                showNotification('❌ Пароль должен быть не менее 3 символов', 'error');
+                return;
+            }
+
+            if (password !== confirm) {
+                showNotification('❌ Пароли не совпадают', 'error');
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('memeBankUsers'));
+
+            if (users[username]) {
+                showNotification('❌ Пользователь уже существует', 'error');
+                return;
+            }
+
+            // Создаем нового пользователя со стартовым набором
+            users[username] = {
+                password: password,
+                balance: 1000,
+                crypto: { MEME: 100 },
+                clickValue: 1,
+                upgrades: [],
+                totalClicks: 0,
+                level: 1,
+                easterEggs: [],
+                joinDate: new Date().toISOString()
+            };
+
+            localStorage.setItem('memeBankUsers', JSON.stringify(users));
+
+            currentUser = username;
+            localStorage.setItem('currentUser', username);
+            loadUserData();
+            updateUI();
+            startPassiveIncome();
+            updateLeaderboard();
+            updateRecipients();
+            updateTransferHistory();
+
+            document.getElementById('auth-modal').style.display = 'none';
+            showNotification(`🎉 Регистрация успешна! Добро пожаловать, ${username}!`);
+
+            document.getElementById('register-username').value = '';
+            document.getElementById('register-password').value = '';
+            document.getElementById('register-confirm').value = '';
+            showLoginForm();
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            if (passiveInterval) clearInterval(passiveInterval);
+            document.getElementById('auth-modal').style.display = 'flex';
+            showNotification('👋 Вы вышли из системы', 'warning');
+        }
+
+        function showRegisterForm() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'block';
+        }
+
+        function showLoginForm() {
+            document.getElementById('register-form').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
+        }
+
+        // ========================
+        // РАБОТА С ДАННЫМИ
+        // ========================
+
+        function loadUserData() {
+            const users = JSON.parse(localStorage.getItem('memeBankUsers'));
+            userData = users[currentUser];
+            easterEggsFound = userData.easterEggs || [];
+            return userData;
+        }
+
+        function saveUserData() {
+            const users = JSON.parse(localStorage.getItem('memeBankUsers'));
+            users[currentUser] = userData;
+            localStorage.setItem('memeBankUsers', JSON.stringify(users));
+            updateLeaderboard();
+        }
+
+        // ========================
+        // КЛИКЕР СИСТЕМА (ИСПРАВЛЕНО!)
+        // ========================
+
+        function clickCoin(event) {
+            if (!currentUser || currentUser === 'Гость') {
+                showNotification('❌ Войдите в систему!', 'error');
+                return;
+            }
+
+            loadUserData();
+            userData.balance += userData.clickValue;
+            userData.totalClicks = (userData.totalClicks || 0) + 1;
+
+            // Обновляем уровень
+            userData.level = Math.floor(userData.totalClicks / 100) + 1;
+
+            saveUserData();
+            updateUI();
+
+            // Эффект клика
+            const rect = event.target.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            const effect = document.createElement('div');
+            effect.className = 'click-effect';
+            effect.textContent = `+${userData.clickValue} ₣`;
+            effect.style.left = x + 'px';
+            effect.style.top = y + 'px';
+            document.getElementById('meme-coin').appendChild(effect);
+
+            setTimeout(() => effect.remove(), 1000);
+
+            // Бонус за каждые 100 кликов - ИСПРАВЛЕНО: 10x от стоимости клика
+            if (userData.totalClicks % 100 === 0) {
+                const bonus = userData.clickValue * 10; // В 10 раз больше чем за один клик
+                userData.balance += bonus;
+                saveUserData();
+                updateUI();
+                showNotification(`🎁 Бонус за 100 кликов! +${bonus} ₣`);
+            }
+        }
+
+        function calculatePassiveIncome() {
+            if (!userData.upgrades) return 0;
+            return userData.upgrades.reduce((total, upgradeId) => {
+                const upgrade = upgrades.find(u => u.id === upgradeId);
+                return total + (upgrade ? upgrade.passive : 0);
+            }, 0);
+        }
+
+        function startPassiveIncome() {
+            if (passiveInterval) clearInterval(passiveInterval);
+
+            passiveInterval = setInterval(() => {
+                if (currentUser && currentUser !== 'Гость') {
+                    loadUserData();
+                    const income = calculatePassiveIncome();
+                    if (income > 0) {
+                        userData.balance += income;
+                        saveUserData();
+                        updateUI();
+                    }
+                }
+            }, 1000);
+        }
+
+        function updateUI() {
+            if (!currentUser || currentUser === 'Гость') return;
+
+            loadUserData();
+
+            document.getElementById('username').textContent = currentUser;
+            document.getElementById('balance').textContent = `${Math.floor(userData.balance)} ₣`;
+            document.getElementById('click-value').textContent = `${userData.clickValue} ₣`;
+            document.getElementById('total-clicks').textContent = userData.totalClicks || 0;
+
+            const passiveIncome = calculatePassiveIncome();
+            document.getElementById('passive-income').textContent = `${passiveIncome.toFixed(1)} ₣/сек`;
+
+            updateUpgradesDisplay();
+        }
+
+        // ========================
+        // УЛУЧШЕНИЯ
+        // ========================
+
+        function updateUpgradesDisplay() {
+            const grid = document.getElementById('upgrades-grid');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+
+            upgrades.forEach(upgrade => {
+                const isBought = userData.upgrades && userData.upgrades.includes(upgrade.id);
+                const canAfford = userData.balance >= upgrade.price;
+
+                const card = document.createElement('div');
+                card.className = 'upgrade-card';
+                if (isBought) card.style.borderColor = 'var(--success)';
+
+                card.innerHTML = `
+                        <div class="upgrade-header">
+                            <div>
+                                <div class="upgrade-icon">${upgrade.icon}</div>
+                                <h3 style="margin: 10px 0; color: ${isBought ? 'var(--success)' : 'var(--light)'}">
+                                    ${upgrade.name}
+                                </h3>
+                            </div>
+                            <div class="upgrade-price">${upgrade.price} ₣</div>
+                        </div>
+                        <p style="color: #aaa; margin-bottom: 15px;">${upgrade.desc}</p>
+                        <button onclick="buyUpgrade(${upgrade.id})"
+                                ${isBought ? 'disabled' : !canAfford ? 'disabled' : ''}
+                                style="width: 100%; padding: 15px; border-radius: 10px; border: none;
+                                       background: ${isBought ? 'var(--success)' : canAfford ? 'linear-gradient(45deg, var(--primary), var(--secondary))' : '#666'};
+                                       color: white; font-weight: bold; cursor: ${isBought || !canAfford ? 'not-allowed' : 'pointer'}; font-size: 1rem;">
+                            ${isBought ? '✅ Куплено' : canAfford ? '🛒 Купить' : '💰 Не хватает'}
+                        </button>
+                    `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        function buyUpgrade(upgradeId) {
+            loadUserData();
+            const upgrade = upgrades.find(u => u.id === upgradeId);
+
+            if (userData.balance < upgrade.price) {
+                showNotification(`❌ Недостаточно средств! Нужно: ${upgrade.price} ₣`, 'error');
+                return;
+            }
+
+            userData.balance -= upgrade.price;
+            userData.clickValue += upgrade.clickBonus;
+            userData.upgrades = userData.upgrades || [];
+            if (!userData.upgrades.includes(upgradeId)) {
+                userData.upgrades.push(upgradeId);
+            }
+
+            saveUserData();
+            updateUI();
+            updateUpgradesDisplay();
+            showNotification(`✅ Улучшение "${upgrade.name}" куплено!`);
+        }
+
+        // ========================
+        // КРИПТОВАЛЮТЫ
+        // ========================
+
+        function initCryptoMarket() {
+            cryptocurrencies.forEach(crypto => {
+                cryptoPrices[crypto.id] = crypto.basePrice;
+            });
+
+            setInterval(updateCryptoPrices, 30000);
+            updateCryptoMarket();
+        }
+
+        function updateCryptoPrices() {
+            cryptocurrencies.forEach(crypto => {
+                const change = (Math.random() * 2 - 1) * crypto.volatility;
+                cryptoPrices[crypto.id] = crypto.basePrice * (1 + change);
+            });
+            updateCryptoMarket();
+        }
+
+        function updateCryptoMarket() {
+            const market = document.getElementById('crypto-market');
+            if (!market) return;
+
+            market.innerHTML = '';
+
+            cryptocurrencies.forEach(crypto => {
+                const price = cryptoPrices[crypto.id] || crypto.basePrice;
+                const change = ((price - crypto.basePrice) / crypto.basePrice * 100);
+                const owned = userData.crypto && userData.crypto[crypto.id] ? userData.crypto[crypto.id] : 0;
+                const ownedValue = owned * price;
+
+                const card = document.createElement('div');
+                card.className = 'crypto-card';
+                card.style.borderColor = crypto.color;
+
+                card.innerHTML = `
+                        <div class="crypto-header">
+                            <div class="crypto-icon" style="color: ${crypto.color}">
+                                ${crypto.icon}
+                            </div>
+                            <div>
+                                <h3 style="margin: 0;">${crypto.name}</h3>
+                                <div style="color: #aaa;">${crypto.id}</div>
+                            </div>
+                        </div>
+
+                        <div class="crypto-price">${price.toFixed(crypto.id === 'BTC' ? 2 : 8)} ₣</div>
+
+                        <div style="padding: 8px 15px; border-radius: 20px; background: ${change >= 0 ? 'rgba(0,255,136,0.2)' : 'rgba(255,56,96,0.2)'}; color: ${change >= 0 ? 'var(--success)' : 'var(--danger)'}; display: inline-block; font-weight: bold;">
+                            ${change >= 0 ? '📈' : '📉'} ${change >= 0 ? '+' : ''}${change.toFixed(2)}%
+                        </div>
+
+                        <div style="margin-top: 15px; color: #aaa;">
+                            У вас: ${owned.toFixed(2)} ${crypto.id}<br>
+                            Стоимость: ${ownedValue.toFixed(2)} ₣
+                        </div>
+
+                        <div style="margin-top: 20px;">
+                            <input type="number" id="amount-${crypto.id}" placeholder="Количество"
+                                   style="width: 100%; padding: 12px; border-radius: 8px; border: 2px solid ${crypto.color}; background: rgba(255,255,255,0.1); color: white; margin-bottom: 10px;">
+                        </div>
+
+                        <div class="crypto-actions">
+                            <button onclick="buyCrypto('${crypto.id}')"
+                                    style="flex: 1; padding: 12px; background: linear-gradient(45deg, #00cc00, #00aa00); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                                🛒 Купить
+                            </button>
+                            <button onclick="sellCrypto('${crypto.id}')" ${owned <= 0 ? 'disabled' : ''}
+                                    style="flex: 1; padding: 12px; background: linear-gradient(45deg, #ff3333, #cc0000); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: ${owned <= 0 ? 'not-allowed' : 'pointer'}; opacity: ${owned <= 0 ? '0.5' : '1'}">
+                                💰 Продать
+                            </button>
+                        </div>
+                    `;
+
+                market.appendChild(card);
+            });
+        }
+
+        function buyCrypto(cryptoId) {
+            loadUserData();
+            const crypto = cryptocurrencies.find(c => c.id === cryptoId);
+            const input = document.getElementById(`amount-${cryptoId}`);
+            const amount = parseFloat(input.value);
+
+            if (!amount || amount <= 0 || isNaN(amount)) {
+                showNotification('❌ Введите количество!', 'error');
+                return;
+            }
+
+            const price = cryptoPrices[cryptoId] || crypto.basePrice;
+            const cost = amount * price;
+
+            if (userData.balance < cost) {
+                showNotification(`❌ Недостаточно средств! Нужно: ${cost.toFixed(2)} ₣`, 'error');
+                return;
+            }
+
+            userData.balance -= cost;
+            userData.crypto = userData.crypto || {};
+            userData.crypto[cryptoId] = (userData.crypto[cryptoId] || 0) + amount;
+
+            saveUserData();
+            updateUI();
+            updateCryptoMarket();
+            showNotification(`✅ Куплено ${amount} ${cryptoId} за ${cost.toFixed(2)} ₣`);
+            input.value = '';
+        }
+
+        function sellCrypto(cryptoId) {
+            loadUserData();
+            const crypto = cryptocurrencies.find(c => c.id === cryptoId);
+            const input = document.getElementById(`amount-${cryptoId}`);
+            const amount = parseFloat(input.value);
+            const owned = userData.crypto && userData.crypto[cryptoId] ? userData.crypto[cryptoId] : 0;
+
+            if (!amount || amount <= 0 || isNaN(amount)) {
+                showNotification('❌ Введите количество!', 'error');
+                return;
+            }
+
+            if (amount > owned) {
+                showNotification(`❌ Недостаточно ${cryptoId}! У вас: ${owned.toFixed(2)}`, 'error');
+                return;
+            }
+
+            const price = cryptoPrices[cryptoId] || crypto.basePrice;
+            const earnings = amount * price;
+
+            userData.balance += earnings;
+            userData.crypto[cryptoId] -= amount;
+
+            if (userData.crypto[cryptoId] <= 0) {
+                delete userData.crypto[cryptoId];
+            }
+
+            saveUserData();
+            updateUI();
+            updateCryptoMarket();
+            showNotification(`✅ Продано ${amount} ${cryptoId} за ${earnings.toFixed(2)} ₣`);
+            input.value = '';
+        }
+
+        // ========================
+        // ИГРЫ С АНИМАЦИЯМИ
+        // ========================
+
+        async function playSlots() {
+            if (!currentUser) {
+                showNotification('❌ Войдите в систему!', 'error');
+                return;
+            }
+
+            loadUserData();
+
+            if (userData.balance < 100) {
+                showNotification('❌ Нужно 100 ₣ для игры!', 'error');
+                return;
+            }
+
+            userData.balance -= 100;
+            saveUserData();
+            updateUI();
+
+            const display = document.getElementById('slots-display');
+            const result = document.getElementById('slots-result');
+
+            result.textContent = '🎰 Вращение...';
+            const symbols = ['🍒', '🍋', '⭐', '7️⃣', '🔔', '💎'];
+
+            for (let i = 0; i < 20; i++) {
+                display.innerHTML = '';
+                for (let j = 0; j < 3; j++) {
+                    const reel = document.createElement('div');
+                    reel.className = 'slot-reel';
+                    reel.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                    display.appendChild(reel);
+                }
+                await new Promise(resolve => setTimeout(resolve, 50));
+            }
+
+            const finalSymbols = [
+                symbols[Math.floor(Math.random() * symbols.length)],
+                symbols[Math.floor(Math.random() * symbols.length)],
+                symbols[Math.floor(Math.random() * symbols.length)]
+            ];
+
+            display.innerHTML = '';
+            finalSymbols.forEach(symbol => {
+                const reel = document.createElement('div');
+                reel.className = 'slot-reel';
+                reel.textContent = symbol;
+                display.appendChild(reel);
+            });
+
+            const win = finalSymbols[0] === finalSymbols[1] && finalSymbols[1] === finalSymbols[2];
+
+            if (win) {
+                const winnings = 100 * 10;
+                userData.balance += winnings;
+                saveUserData();
+                updateUI();
+                result.textContent = `🎉 ДЖЕКПОТ! Выигрыш: ${winnings} ₣`;
+                result.style.color = 'var(--success)';
+                showNotification(`🎰 ДЖЕКПОТ! +${winnings} ₣`, 'success');
+            } else {
+                result.textContent = '😢 Не повезло...';
+                result.style.color = 'var(--danger)';
+                showNotification('🎰 Не повезло...', 'error');
+            }
+        }
+
+        async function playDice() {
+            if (!currentUser) {
+                showNotification('❌ Войдите в систему!', 'error');
+                return;
+            }
+
+            loadUserData();
+
+            if (userData.balance < 50) {
+                showNotification('❌ Нужно 50 ₣ для игры!', 'error');
+                return;
+            }
+
+            userData.balance -= 50;
+
+            const display = document.getElementById('dice-display');
+            const result = document.getElementById('dice-result');
+
+            result.textContent = '🎲 Бросаем...';
+
+            for (let i = 0; i < 10; i++) {
+                display.textContent = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'][Math.floor(Math.random() * 6)];
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+
+            const roll = Math.floor(Math.random() * 6) + 1;
+            const guess = Math.floor(Math.random() * 6) + 1;
+            const win = roll === guess;
+
+            display.textContent = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'][roll - 1];
+
+            if (win) {
+                const winnings = 50 * 6;
+                userData.balance += winnings;
+                result.textContent = `🎉 Угадали! Выпало ${roll}. Выигрыш: ${winnings} ₣`;
+                result.style.color = 'var(--success)';
+                showNotification(`🎲 Поздравляем! +${winnings} ₣`, 'success');
+            } else {
+                result.textContent = `😢 Вы загадали ${guess}, выпало ${roll}`;
+                result.style.color = 'var(--danger)';
+                showNotification('🎲 Не угадали...', 'error');
+            }
+
+            saveUserData();
+            updateUI();
+        }
+
+        async function playCoinFlip() {
+            if (!currentUser) {
+                showNotification('❌ Войдите в систему!', 'error');
+                return;
+            }
+
+            loadUserData();
+
+            if (userData.balance < 20) {
+                showNotification('❌ Нужно 20 ₣ для игры!', 'error');
+                return;
+            }
+
+            userData.balance -= 20;
+
+            const display = document.getElementById('coin-display');
+            const result = document.getElementById('coin-result');
+
+            result.textContent = '🪙 Подбрасываем...';
+
+            for (let i = 0; i < 8; i++) {
+                display.textContent = i % 2 === 0 ? '🦅' : '👑';
+                display.style.transform = `rotateY(${i * 45}deg)`;
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+
+            const side = Math.random() > 0.5 ? '🦅' : '👑';
+            const guess = Math.random() > 0.5 ? '🦅' : '👑';
+            const win = side === guess;
+
+            display.textContent = side;
+            display.style.transform = 'rotateY(0deg)';
+
+            if (win) {
+                const winnings = 20 * 2;
+                userData.balance += winnings;
+                result.textContent = `🎉 ${side === '🦅' ? 'Орел' : 'Решка'}! Выигрыш: ${winnings} ₣`;
+                result.style.color = 'var(--success)';
+                showNotification(`🪙 Поздравляем! +${winnings} ₣`, 'success');
+            } else {
+                result.textContent = `😢 Выпало ${side === '🦅' ? 'Орел' : 'Решка'}`;
+                result.style.color = 'var(--danger)';
+                showNotification('🪙 Не повезло...', 'error');
+            }
+
+            saveUserData();
+            updateUI();
+        }
+
+        async function playCrash() {
+            if (!currentUser) {
+                showNotification('❌ Войдите в систему!', 'error');
+                return;
+            }
+
+            loadUserData();
+
+            if (userData.balance < 200) {
+                showNotification('❌ Нужно 200 ₣ для игры!', 'error');
+                return;
+            }
+
+            userData.balance -= 200;
+
+            const display = document.getElementById('crash-display');
+            const line = display.querySelector('.crash-line');
+            const result = document.getElementById('crash-result');
+
+            result.textContent = '📈 Старт...';
+            line.style.transition = 'left 3s linear';
+            line.style.left = '0%';
+
+            const crashPoint = 1 + Math.random() * 9;
+            const cashOutTime = Math.random() * 2.8;
+
+            line.style.left = '100%';
+
+            setTimeout(() => {
+                const success = cashOutTime < (crashPoint / 10 * 2.8);
+
+                if (success) {
+                    const multiplier = 1 + (cashOutTime / 2.8 * 9);
+                    const winnings = 200 * multiplier;
+                    userData.balance += winnings;
+                    result.textContent = `🎉 Успех! Забрали на ${multiplier.toFixed(2)}x. Выигрыш: ${winnings.toFixed(2)} ₣`;
+                    result.style.color = 'var(--success)';
+                    showNotification(`📈 Успех! +${winnings.toFixed(2)} ₣`, 'success');
+                } else {
+                    result.textContent = `💥 Краш на ${crashPoint.toFixed(2)}x!`;
+                    result.style.color = 'var(--danger)';
+                    showNotification('📈 Вы не успели забрать!', 'error');
+                }
+
+                saveUserData();
+                updateUI();
+
+                setTimeout(() => {
+                    line.style.transition = 'none';
+                    line.style.left = '0';
+                    setTimeout(() => {
+                        line.style.transition = 'left 3s linear';
+                    }, 10);
+                }, 1000);
+
+            }, cashOutTime * 1000);
+        }
+
+        // ========================
+        // ПЕРЕВОДЫ (МУЛЬТИПЛЕЕР)
+        // ========================
+
+        function updateRecipients() {
+            const select = document.getElementById('recipient-select');
+            if (!select) return;
+
+            select.innerHTML = '<option value="">Выберите получателя</option>';
+
+            const users = JSON.parse(localStorage.getItem('memeBankUsers'));
+            Object.keys(users).forEach(username => {
+                if (username !== currentUser && username !== 'Гость') {
+                    const option = document.createElement('option');
+                    option.value = username;
+                    option.textContent = username;
+                    select.appendChild(option);
+                }
+            });
+        }
+
+        function makeTransfer() {
+            if (!currentUser) {
+                showNotification('❌ Войдите в систему!', 'error');
+                return;
+            }
+
+            loadUserData();
+
+            const toUser = document.getElementById('recipient-select').value;
+            const amount = parseFloat(document.getElementById('transfer-amount').value);
+            const message = document.getElementById('transfer-message').value;
+
+            if (!toUser) {
+                showNotification('❌ Выберите получателя!', 'error');
+                return;
+            }
+
+            if (!amount || amount <= 0) {
+                showNotification('❌ Введите сумму!', 'error');
+                return;
+            }
+
+            if (userData.balance < amount) {
+                showNotification(`❌ Недостаточно средств! У вас: ${userData.balance} ₣`, 'error');
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('memeBankUsers'));
+
+            if (!users[toUser]) {
+                showNotification('❌ Получатель не найден!', 'error');
+                return;
+            }
+
+            userData.balance -= amount;
+            users[toUser].balance += amount;
+
+            const transferHistory = JSON.parse(localStorage.getItem('transferHistory')) || [];
+            transferHistory.push({
+                from: currentUser,
+                to: toUser,
+                amount: amount,
+                message: message,
+                date: new Date().toLocaleString()
+            });
+            localStorage.setItem('transferHistory', JSON.stringify(transferHistory));
+
+            localStorage.setItem('memeBankUsers', JSON.stringify(users));
+
+            checkEasterEggs(message);
+
+            saveUserData();
+            updateUI();
+            updateTransferHistory();
+            updateLeaderboard();
+
+            showNotification(`✅ Переведено ${amount} ₣ пользователю ${toUser}`);
+
+            document.getElementById('transfer-amount').value = '';
+            document.getElementById('transfer-message').value = '';
+        }
+
+        function updateTransferHistory() {
+            const container = document.getElementById('transfer-history');
+            if (!container) return;
+
+            const history = JSON.parse(localStorage.getItem('transferHistory')) || [];
+            const userHistory = history
+                .filter(t => t.from === currentUser || t.to === currentUser)
+                .slice(0, 10);
+
+            if (userHistory.length === 0) {
+                container.innerHTML = '<p style="color: #aaa; text-align: center; padding: 20px;">Нет истории переводов</p>';
+                return;
+            }
+
+            container.innerHTML = userHistory.map(transfer => {
+                const isOutgoing = transfer.from === currentUser;
+                const color = isOutgoing ? 'var(--warning)' : 'var(--success)';
+                const emoji = isOutgoing ? '➡️' : '⬅️';
+
+                return `
+                        <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid ${color};">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <div>
+                                    <div style="font-weight: bold; font-size: 1.1rem;">
+                                        ${emoji} ${isOutgoing ? transfer.to : transfer.from}
+                                    </div>
+                                    ${transfer.message ? `<div style="color: #aaa; margin-top: 5px;">${transfer.message}</div>` : ''}
+                                </div>
+                                <div style="color: ${color}; font-weight: bold; font-size: 1.2rem;">
+                                    ${isOutgoing ? '-' : '+'}${transfer.amount} ₣
+                                </div>
+                            </div>
+                            <div style="color: #666; font-size: 0.9rem; margin-top: 8px;">
+                                ${transfer.date}
+                            </div>
+                        </div>
+                    `;
+            }).join('');
+        }
+
+        // ========================
+        // ЛИДЕРБОРД (МУЛЬТИПЛЕЕР)
+        // ========================
+
+        function updateLeaderboard() {
+            const tbody = document.getElementById('leaderboard-body');
+            if (!tbody) return;
+
+            const users = JSON.parse(localStorage.getItem('memeBankUsers'));
+
+            const players = Object.entries(users)
+                .filter(([username]) => username !== 'Гость')
+                .map(([username, data]) => {
+                    let cryptoValue = 0;
+                    if (data.crypto) {
+                        Object.entries(data.crypto).forEach(([cryptoId, amount]) => {
+                            const crypto = cryptocurrencies.find(c => c.id === cryptoId);
+                            const price = cryptoPrices[cryptoId] || crypto?.basePrice || 0;
+                            cryptoValue += amount * price;
+                        });
+                    }
+
+                    const totalValue = data.balance + cryptoValue;
+                    const level = Math.floor((data.totalClicks || 0) / 100) + 1;
+
+                    return {
+                        username,
+                        balance: data.balance,
+                        cryptoValue,
+                        totalValue,
+                        level,
+                        totalClicks: data.totalClicks || 0
+                    };
+                })
+                .sort((a, b) => b.totalValue - a.totalValue)
+                .slice(0, 10);
+
+            tbody.innerHTML = players.map((player, index) => {
+                let rankClass = '';
+                let medal = '';
+
+                if (index === 0) {
+                    rankClass = 'rank-1';
+                    medal = '🥇';
+                } else if (index === 1) {
+                    rankClass = 'rank-2';
+                    medal = '🥈';
+                } else if (index === 2) {
+                    rankClass = 'rank-3';
+                    medal = '🥉';
+                } else {
+                    medal = '🏅';
+                }
+
+                return `
+                        <tr>
+                            <td class="${rankClass}" style="font-weight: bold;">${medal} ${index + 1}</td>
+                            <td>
+                                <strong>${player.username}</strong>
+                                ${player.username === currentUser ? '<span style="color: var(--success);">(Вы)</span>' : ''}
+                            </td>
+                            <td>${Math.floor(player.balance).toLocaleString()} ₣</td>
+                            <td>${player.cryptoValue.toFixed(2)} ₿</td>
+                            <td>
+                                <div style="background: rgba(106, 17, 203, 0.3); padding: 5px 10px; border-radius: 20px; display: inline-block;">
+                                    Ур. ${player.level}
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+            }).join('');
+        }
+
+        // ========================
+        // ПАСХАЛКИ (ИСПРАВЛЕНО!)
+        // ========================
+
+        function initEasterEggs() {
+            // Клик по логотипу 10 раз
+            let clickCount = 0;
+            document.querySelector('.logo').addEventListener('click', function () {
+                clickCount++;
+                if (clickCount === 10 && !easterEggsFound.includes('logo')) {
+                    loadUserData();
+                    userData.balance += 1000;
+                    easterEggsFound.push('logo');
+                    userData.easterEggs = easterEggsFound;
+                    saveUserData();
+                    updateUI();
+                    showNotification('👁️ Секретное око! +1000 ₣', 'success');
+                    createConfetti();
+                }
+            });
+        }
+
+        function clickEasterEgg() {
+            if (!currentUser) {
+                showNotification('❌ Войдите в систему!', 'error');
+                return;
+            }
+
+            loadUserData();
+
+            if (!easterEggsFound.includes('egg')) {
+                userData.balance += 500; // ДАЁМ 500 монет
+                easterEggsFound.push('egg');
+                userData.easterEggs = easterEggsFound;
+                saveUserData();
+                updateUI();
+                showNotification('🥚 Золотое яйцо! +500 ₣', 'success');
+                createConfetti();
+            } else {
+                showNotification('🥚 Это яйцо уже нашли!', 'warning');
+            }
+        }
+
+        function checkEasterEggs(message) {
+            if (!message) return;
+
+            const lowerMessage = message.toLowerCase().trim();
+            easterEggs.forEach(egg => {
+                if (lowerMessage.includes(egg.trigger) && !easterEggsFound.includes(egg.trigger)) {
+                    loadUserData();
+                    userData.balance += egg.reward; // ДАЁМ награду
+                    easterEggsFound.push(egg.trigger);
+                    userData.easterEggs = easterEggsFound;
+                    saveUserData();
+                    updateUI();
+                    showNotification(`${egg.message}`, 'success');
+                    createConfetti();
+                }
+            });
+        }
+
+        function createConfetti() {
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.innerHTML = ['🎉', '🎊', '✨', '🌟', '💫', '🎈'][Math.floor(Math.random() * 6)];
+                confetti.style.position = 'fixed';
+                confetti.style.fontSize = Math.random() * 20 + 10 + 'px';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = '-50px';
+                confetti.style.color = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.zIndex = '9999';
+                confetti.style.pointerEvents = 'none';
+                confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
+
+                document.body.appendChild(confetti);
+
+                setTimeout(() => confetti.remove(), 5000);
+            }
+        }
+
+        // Создаем анимацию падения конфетти
+        const style = document.createElement('style');
+        style.textContent = `
+                @keyframes fall {
+                    to {
+                        transform: translateY(100vh) rotate(${Math.random() * 360}deg);
+                        opacity: 0;
+                    }
+                }
+            `;
+        document.head.appendChild(style);
+
+        // ========================
+        // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+        // ========================
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            document.getElementById(tabId).classList.add('active');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                if (btn.getAttribute('onclick') === `showTab('${tabId}')`) {
+                    btn.classList.add('active');
+                }
+            });
+
+            if (tabId === 'transfer') {
+                updateRecipients();
+                updateTransferHistory();
+            } else if (tabId === 'crypto') {
+                updateCryptoMarket();
+            } else if (tabId === 'leaderboard') {
+                updateLeaderboard();
+            }
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
